@@ -1,0 +1,12 @@
+@media screen and (max-width: 670px) {
+    #wikipedia-container{
+        display: none;
+    }
+}
+
+
+@media screen and (max-width: 700px) and (orientation:landscape) {
+    #search-container {
+        display: none;
+    }
+}

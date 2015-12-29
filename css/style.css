@@ -1,0 +1,26 @@
+* {box-sizing:border-box;}
+body {background-color: #CCC;}
+
+#search {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#search-nav  {
+    float: left;
+    width: 30%;
+    max-height: 549px;
+    background-color: rgba(256,256,256,.9);
+    border: solid 2px orange;
+    overflow: hidden;
+}
+
+#map-canvas{ display: block; height : 100%; width : 100%; top : 0; left : 0; position : absolute; z-index : -1;}
+
+#wikipedia-container {
+    float: right;
+    width:10%;
+    padding:10px;
+    margin-right: 10px;
+    background-color: rgba(255,255,255,0.7);
+}

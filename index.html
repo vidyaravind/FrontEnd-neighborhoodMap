@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neighborhood Map</title>
+     <meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div id="map-canvas"></div>
+<div class="search">
+    <div id="search-nav">
+        <input id="input" placeholder="Search" type="input" data-bind="textInput: query, valueUpdate: 'keydown'"
+               autocomplete="off">
+        </input>
+        <div id="list">
+            <ul data-bind="template:{name: 'marker',foreach:markers}">
+            </ul>
+            <script type="text/html" id="marker">
+                <div data-bind="visible: visible">
+                    <a href="#" data-bind="attr: {id: id}">
+                        <li>
+                            <p data-bind="text: title"></p>
+                        </li>
+                    </a>
+                </div>
+            </script>
+        </div>
+    </div>
+</div>
+<div id="wikipedia-container">
+    <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
+    <ul id="wikipedia-links">Details:</ul>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="js/lib/knockout-3.3.0.js"></script>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
