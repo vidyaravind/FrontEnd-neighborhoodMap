@@ -1,17 +1,7 @@
+'use strict';
 var map;
-var markersArray = [];
 
-//initializes the google map and loads on the page
-function loadScript() {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp' +
-        '&signed_in=false&callback=initialize';
-    document.body.appendChild(script);
-}
-window.onload = loadScript;
-
-//Initialize mapOtions to get the map and its contents
+//Initialize mapOptions to get the map and its contents
 function initialize() {
     //adding options to the map zoom level and setting the center for the map 
     var mapOptions = {
@@ -93,12 +83,12 @@ var markers = [{
         boolTest: true
     },
     {
-        title: "Exploratarium",
+        title: "Golden Gate",
         lat: 37.800856,
         lng: -122.398635,
-        streetAddress: "Pier 15, The Embarcadero",
+        streetAddress: "Pier 39",
         cityAddress: "San Francisco, CA 94111",
-        url: "www.exploratorium.edu/",
+        url: "http://www.goldengate.org/",
         id: "nav4",
         visible: ko.observable(true),
         boolTest: true
@@ -131,8 +121,7 @@ var markers = [{
 //Sets the infoWindows to each individual marker
 //The markers are inidividually set using a for loop
 function setMarkers(location) {
-
-    for (i = 0; i < location.length; i++) {
+    for (var i = 0; i < location.length; i++) {
         location[i].holdMarker = new google.maps.Marker({
             position: new google.maps.LatLng(location[i].lat, location[i].lng),
             map: map,
@@ -153,7 +142,7 @@ function setMarkers(location) {
         location[i].contentString = location[i].title + '</strong><br><p>' +
             location[i].streetAddress + '<br>' +
             location[i].cityAddress + '<br></p><a class="web-links" href="http://' + location[i].url +
-            '" target="_blank">' + location[i].url + '</a>'
+            '" target="_blank">' + location[i].url + '</a>';
 
 
         var infowindow = new google.maps.InfoWindow({
@@ -162,11 +151,13 @@ function setMarkers(location) {
 
         //Click marker to view infoWindow
         //zoom in and center location on click
+
         new google.maps.event.addListener(location[i].holdMarker, 'click', (function (marker, i) {
             return function () {
                 infowindow.setContent(location[i].contentString);
                 infowindow.open(map, this);
                 map.setCenter(marker.getPosition());
+                toggleBounce(location[i].holdMarker);
             };
         })(location[i].holdMarker, i));
 
@@ -177,18 +168,28 @@ function setMarkers(location) {
             return function () {
                 infowindow.setContent(location[i].contentString);
                 infowindow.open(map, marker);
-                location[i].holdMarker.setAnimation(google.maps.Animation.BOUNCE);
+                //location[i].holdMarker.setAnimation(google.maps.Animation.BOUNCE);
                 map.setCenter(marker.getPosition());
+                toggleBounce(location[i].holdMarker);
+                getWikiLinks(location[i].title);
             };
         })(location[i].holdMarker, i));
     }
 }
+var currentMarker = null;
+//function to animate only the current marker
+function toggleBounce(marker) {
+    if (currentMarker) currentMarker.setAnimation(null);
+    // set this marker to the currentMarker
+    currentMarker = marker;
+    // add a bounce to this marker
+    marker.setAnimation(google.maps.Animation.BOUNCE);
 
-
+}
 //Query through the different locations from nav bar with knockout.js
 //only display markers and nav elements that match query result
 var viewModel = {
-    query: ko.observable(''),
+    query: ko.observable('')
 };
 
 //Does the filter based on the search string
@@ -214,27 +215,31 @@ $("#input").keyup(function () {
     setAllMap();
 });
 
+function getWikiLinks(title) {
 //Api request for wikipedia
 //Timeout method to handle error on the page
-var wikiRequestTimeout = setTimeout(function () {
-    $wikiElem.text("Failed to get wikipedia resources");
-}, 8000);
+    var wikiRequestTimeout = setTimeout(function () {
+        $wikiElem.text("Failed to get wikipedia resources");
+    }, 8000);
 
-var $wikiElem = $('#wikipedia-links');
-//wiki url is set based on search string
+    var $wikiElem = $('#wikipedia-links');
+    $wikiElem.empty();
+//wiki url is set based on the click event triggered based on location title
 //jsonp request is made to display the results
-var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=Visit_California&format=json&callback=wikiCallback';
-var request = $.ajax({
-    url: wikiUrl,
-    dataType: "jsonp",
-    success: function (response) {
-        var articleList = response[1];
-        for (var i = 0; i < articleList.length; i++) {
-            articleStr = articleList[i];
-            var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-            $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
-            clearTimeout(wikiRequestTimeout);
+    var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+title+
+    '&format=json&callback=wikiCallback';
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+        success: function (response) {
+            var articleList = response[1];
+            //Retrieving the first two links from the result set
+            for (var i = 0; i < 1; i++) {
+                var articleStr = articleList[i];
+                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
+                clearTimeout(wikiRequestTimeout);
+            }
         }
-    }
-});
-
+    });
+}
