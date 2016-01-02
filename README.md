@@ -19,9 +19,9 @@ Steps to run the app
 
 Notes:
 Added gulp task to minify the PRODUCTION version
-1.html
-2.js
-3.css
+1.html<br/>
+2.js<br/>
+3.css<br/>
 
 <strong>Reference:</strong><br/>
 http://knockoutjs.com/documentation/introduction.html<br/>
