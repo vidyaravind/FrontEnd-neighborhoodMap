@@ -14,19 +14,18 @@
     <!-- search content details-->
     <div class="search">
         <div class="search-nav">
-            <input class="search-field" placeholder="Search" type="input" data-bind="textInput: query, valueUpdate: 'keydown'"
+            <input class="search-field" placeholder="Search" type="text" data-bind="textInput: query, valueUpdate: 'keydown'"
             autocomplete="off">
-        </input>
         <div class="search-list">
             <ul data-bind="template:{name: 'marker',foreach:markers}">
             </ul>
             <script type="text/html" id="marker">
             <div data-bind="visible: visible">
-            <a href="#" data-bind="attr: {id: id}">
-            <li>
-            <p data-bind="text: title"></p>
-            </li>
-            </a>
+                <a href="#" data-bind="attr: {id: id}">
+                    <li>
+                        <p data-bind="text: title"></p>
+                    </li>
+                </a>
             </div>
             </script>
         </div>
