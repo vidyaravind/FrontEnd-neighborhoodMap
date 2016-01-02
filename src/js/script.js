@@ -3,7 +3,7 @@ var map;
 
 //Initialize mapOptions to get the map and its contents
 function initialize() {
-    //adding options to the map zoom level and setting the center for the map 
+    //adding options to the map zoom level and setting the center for the map
     var mapOptions = {
         zoom: 6,
         center: new google.maps.LatLng(35.644033, -121.1875503),
@@ -11,7 +11,7 @@ function initialize() {
         disableDefaultUI: true
     };
 
-    //assigning the map 
+    //assigning the map
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     //calling setMarkers to load the markers on the page
@@ -37,7 +37,7 @@ function setAllMap() {
 
 //Information about the different locations
 //Provides information for the markers
-//Details about the markers 
+//Details about the markers
 var markers = [{
     title: "Sea World",
     lat: 32.7639528,
@@ -49,72 +49,72 @@ var markers = [{
     visible: ko.observable(true),
     boolTest: true
 },
-    {
-        title: "Disney Land",
-        lat: 33.805825,
-        lng: -117.9229715,
-        streetAddress: "1313 Disneyland Dr",
-        cityAddress: "Anaheim, CA 92802",
-        url: "https://disneyland.disney.go.com/",
-        id: "nav1",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Hearst Castle",
-        lat: 35.644033,
-        lng: -121.1875503,
-        streetAddress: "750 Hearst Castle Rd",
-        cityAddress: "San Simeon, CA 93452",
-        url: "http://hearstcastle.org/",
-        id: "nav2",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Monterey Bay Aquarium",
-        lat: 36.618266,
-        lng: -121.902339,
-        streetAddress: "886 Cannery Row",
-        cityAddress: "Monterey, CA 93940",
-        url: "www.montereybayaquarium.org/",
-        id: "nav3",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Golden Gate",
-        lat: 37.800856,
-        lng: -122.398635,
-        streetAddress: "Pier 39",
-        cityAddress: "San Francisco, CA 94111",
-        url: "http://www.goldengate.org/",
-        id: "nav4",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Lake Tahoe",
-        lat: 39.104083,
-        lng: -119.957676,
-        streetAddress: "3411 Lake Tahoe Blvd",
-        cityAddress: "South Lake Tahoe, CA",
-        url: "http://laketahoe.com/",
-        id: "nav5",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Lake Elsinore",
-        lat: 33.7529,
-        lng: -116.0556,
-        streetAddress: " 130 South Main Street ",
-        cityAddress: "Lake Elsinore, CA 92530",
-        url: "http://www.lake-elsinore.org/",
-        id: "nav6",
-        visible: ko.observable(true),
-        boolTest: true
-    }];
+{
+    title: "Disney Land",
+    lat: 33.805825,
+    lng: -117.9229715,
+    streetAddress: "1313 Disneyland Dr",
+    cityAddress: "Anaheim, CA 92802",
+    url: "https://disneyland.disney.go.com/",
+    id: "nav1",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Hearst Castle",
+    lat: 35.644033,
+    lng: -121.1875503,
+    streetAddress: "750 Hearst Castle Rd",
+    cityAddress: "San Simeon, CA 93452",
+    url: "http://hearstcastle.org/",
+    id: "nav2",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Monterey Bay Aquarium",
+    lat: 36.618266,
+    lng: -121.902339,
+    streetAddress: "886 Cannery Row",
+    cityAddress: "Monterey, CA 93940",
+    url: "www.montereybayaquarium.org/",
+    id: "nav3",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Golden Gate",
+    lat: 37.800856,
+    lng: -122.398635,
+    streetAddress: "Pier 39",
+    cityAddress: "San Francisco, CA 94111",
+    url: "http://www.goldengate.org/",
+    id: "nav4",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Lake Tahoe",
+    lat: 39.104083,
+    lng: -119.957676,
+    streetAddress: "3411 Lake Tahoe Blvd",
+    cityAddress: "South Lake Tahoe, CA",
+    url: "http://laketahoe.com/",
+    id: "nav5",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Lake Elsinore",
+    lat: 33.7529,
+    lng: -116.0556,
+    streetAddress: " 130 South Main Street ",
+    cityAddress: "Lake Elsinore, CA 92530",
+    url: "http://www.lake-elsinore.org/",
+    id: "nav6",
+    visible: ko.observable(true),
+    boolTest: true
+}];
 
 
 //Sets the markers on the map within the initialize function
@@ -140,9 +140,9 @@ function setMarkers(location) {
 
         //Binds infoWindow content to each marker
         location[i].contentString = location[i].title + '</strong><br><p>' +
-            location[i].streetAddress + '<br>' +
-            location[i].cityAddress + '<br></p><a class="web-links" href="http://' + location[i].url +
-            '" target="_blank">' + location[i].url + '</a>';
+        location[i].streetAddress + '<br>' +
+        location[i].cityAddress + '<br></p><a class="web-links" href="http://' + location[i].url +
+        '" target="_blank">' + location[i].url + '</a>';
 
 
         var infowindow = new google.maps.InfoWindow({
@@ -158,6 +158,7 @@ function setMarkers(location) {
                 infowindow.open(map, this);
                 map.setCenter(marker.getPosition());
                 toggleBounce(location[i].holdMarker);
+                getWikiLinks(location[i].title);
             };
         })(location[i].holdMarker, i));
 
@@ -215,31 +216,23 @@ $("#input").keyup(function () {
     setAllMap();
 });
 
-function getWikiLinks(title) {
-//Api request for wikipedia
-//Timeout method to handle error on the page
-    var wikiRequestTimeout = setTimeout(function () {
-        $wikiElem.text("Failed to get wikipedia resources");
-    }, 8000);
-
-    var $wikiElem = $('#wikipedia-links');
-    $wikiElem.empty();
-//wiki url is set based on the click event triggered based on location title
-//jsonp request is made to display the results
-    var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+title+
+//ajax call to load wiki url in info window
+function getWikiLinks(marker) {
+    //construct wiki url to load
+    var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+ marker+
     '&format=json&callback=wikiCallback';
-    $.ajax({
+    var settings = {
         url: wikiUrl,
-        dataType: "jsonp",
+        dataType: 'jsonp',
+        timeout: 7000,
         success: function (response) {
-            var articleList = response[1];
-            //Retrieving the first two links from the result set
-            for (var i = 0; i < 1; i++) {
-                var articleStr = articleList[i];
-                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
-                clearTimeout(wikiRequestTimeout);
-            }
+            var articleStr = response[0];
+            var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+            $('.web-links').append('<li><a href="' + url + '">' + articleStr + '</a></li>');
+        },
+        error: function (jq, status, error) {
+            alert("Status: " + status); alert("Error: " + error);
         }
-    });
+    };
+    $.ajax(settings);
 }
