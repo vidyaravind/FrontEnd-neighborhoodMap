@@ -17,10 +17,11 @@
             <input class="search-field" placeholder="Search" type="text" data-bind="textInput: query, valueUpdate: 'keydown'"
             autocomplete="off">
         <div class="search-list">
-            <ul data-bind="template:{name: 'marker',foreach:markers}">
+            <button class="button" data-bind="click: toggleDisplay, text: toggleDisplayText"></button>
+            <ul data-bind="template:{name: 'marker',foreach:markers},visible: toogleDisplayStatus">
             </ul>
             <script type="text/html" id="marker">
-            <div data-bind="visible: visible">
+            <div data-bind="visible: visible,click: $parent.openInfoWindow">
                 <a href="#" data-bind="attr: {id: id}">
                     <li>
                         <p data-bind="text: title"></p>

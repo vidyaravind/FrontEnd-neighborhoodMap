@@ -152,8 +152,9 @@ function setMarkers(location) {
         //Click marker to view infoWindow
         //zoom in and center location on click
 
-        new google.maps.event.addListener(location[i].holdMarker, 'click', (function (marker, i) {
+        google.maps.event.addListener(location[i].holdMarker, 'click', (function (marker, i) {
             return function () {
+                console.log(marker);
                 infowindow.setContent(location[i].contentString);
                 infowindow.open(map, this);
                 map.setCenter(marker.getPosition());
@@ -162,19 +163,19 @@ function setMarkers(location) {
             };
         })(location[i].holdMarker, i));
 
-        //Click nav element to view infoWindow
-        //zoom in and center location on click
-        var searchNav = $('#nav' + i);
-        searchNav.click((function (marker, i) {
-            return function () {
-                infowindow.setContent(location[i].contentString);
-                infowindow.open(map, marker);
-                //location[i].holdMarker.setAnimation(google.maps.Animation.BOUNCE);
-                map.setCenter(marker.getPosition());
-                toggleBounce(location[i].holdMarker);
-                getWikiLinks(location[i].title);
-            };
-        })(location[i].holdMarker, i));
+        ////Click nav element to view infoWindow
+        ////zoom in and center location on click
+        //var searchNav = $('#nav' + i);
+        //searchNav.click((function (marker, i) {
+        //    return function () {
+        //        infowindow.setContent(location[i].contentString);
+        //        infowindow.open(map, marker);
+        //        //location[i].holdMarker.setAnimation(google.maps.Animation.BOUNCE);
+        //        map.setCenter(marker.getPosition());
+        //        toggleBounce(location[i].holdMarker);
+        //        getWikiLinks(location[i].title);
+        //    };
+        //})(location[i].holdMarker, i));
     }
 }
 var currentMarker = null;
@@ -189,32 +190,49 @@ function toggleBounce(marker) {
 }
 //Query through the different locations from nav bar with knockout.js
 //only display markers and nav elements that match query result
-var viewModel = {
-    query: ko.observable('')
+var viewModel = function () {
+    var self = this;
+    self.query = ko.observable('');
+    self.isDisplayOpen = ko.observable(true);
+    self.markers = ko.observableArray([]);
+
+    self.toggleDisplay = function () {
+        self.isDisplayOpen(!self.isDisplayOpen());
+    };
+
+    self.toggleDisplayText = ko.computed(function () {
+        return self.isDisplayOpen() ? "hide" : "show";
+    });
+
+    self.toogleDisplayStatus = ko.computed(function () {
+        return self.isDisplayOpen() ? true : false;
+    });
+//Does the filter based on the search string
+    self.markers = ko.computed(function () {
+        var search = self.query().toLowerCase();
+        return ko.utils.arrayFilter(markers, function (marker) {
+            if (marker.title.toLowerCase().indexOf(search) >= 0) {
+                marker.boolTest = true;
+                return marker.visible(true);
+            } else {
+                marker.boolTest = false;
+                setAllMap();
+                return marker.visible(false);
+            }
+        });
+    });
+
+    self.openInfoWindow = function (marker) {
+        new google.maps.event.trigger(marker,'click');
+    }
 };
 
-//Does the filter based on the search string
-viewModel.markers = ko.dependentObservable(function () {
-    var self = this;
-    var search = self.query().toLowerCase();
-    return ko.utils.arrayFilter(markers, function (marker) {
-        if (marker.title.toLowerCase().indexOf(search) >= 0) {
-            marker.boolTest = true;
-            return marker.visible(true);
-        } else {
-            marker.boolTest = false;
-            setAllMap();
-            return marker.visible(false);
-        }
-    });
-}, viewModel);
+//Sets the markers on the map within the initialize function
+//Sets the infoWindows to each individual marker
+//The markers are inidividually set using a for loop
 
-ko.applyBindings(viewModel);
+ko.applyBindings(new viewModel());
 
-//show $ hide markers in sync with nav
-$("#input").keyup(function () {
-    setAllMap();
-});
 
 //ajax call to load wiki url in info window
 function getWikiLinks(marker) {
