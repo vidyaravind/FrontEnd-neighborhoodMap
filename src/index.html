@@ -9,36 +9,37 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
     <!-- map details-->
     <div class="map-canvas" id="map-canvas"></div>
     <!-- search content details-->
     <div class="search list-group">
         <div class="search-nav list-group-item">
             <input class="search-field" placeholder="Search" type="text" data-bind="textInput: query, event: {keyup: search}"
-                   autocomplete="on">
+            autocomplete="off">
             <div class="search-list list-group-item">
-                <button class="button" data-bind="click: toggleDisplay, text: toggleDisplayText"></button>
+                <button class="button showhide" data-bind="click: toggleDisplay, text: toggleDisplayText"></button>
                 <ul data-bind="template:{name: 'marker',foreach:initLocs},visible: toogleDisplayStatus">
                 </ul>
                 <script type="text/html" id="marker">
-                    <div data-bind="visible: visible">
-                        <a href="#" data-bind="attr: {id: id},click: $parent.openInfoWindow">
-                            <li>
-                                <p data-bind="text: title"></p>
-                            </li>
-                        </a>
-                    </div>
+                <div data-bind="visible: visible">
+                <a href="#" data-bind="attr: {id: id},click: $parent.openInfoWindow">
+                <p data-bind="text: title"></p>
+                </a>
+                </div>
                 </script>
             </div>
         </div>
     </div>
-<!-- loading all js files -->
-<script src="js/lib/jquery.min.js"></script>
+    <!-- loading all js files -->
+    <script src="js/lib/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="js/lib/knockout-3.3.0.js"></script>
-<script src="js/script.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj4LxOb5ubEX_2tjOh3JUYqmhD5BxPLzk&signed_in=false&libraries=places&callback=initialize" async defer></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="js/lib/knockout-3.3.0.js"></script>
+    <script src="js/script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDj4LxOb5ubEX_2tjOh3JUYqmhD5BxPLzk&signed_in=false&libraries=places&callback=initialize" async defer></script> 
+        <!-- For Production: UNCOMMENT these script tags and comment the css and script js
+         <script src="dist/js/script.js"></script>
+        <link rel="stylesheet" href="dist/css/style.css">
+    -->
 </body>
 </html>

@@ -6,7 +6,7 @@ var markers = [];
 var CLIENT_ID='HFL5YZCURJPD00BQUGRDJK5WN2YET54N2KZPJHU4LOCZ0HXN';
 var CLIENT_SECRET='N3DUX3TQWRCSREJHHZGPPXCKY2RRIXARDZKHOCPZZT5HGHHX';
 var fourSquareBaseUrl='https://api.foursquare.com/v2/venues/search?client_id=' +
-    CLIENT_ID + '&client_secret=' + CLIENT_SECRET + '&v=20160105&query=';
+CLIENT_ID + '&client_secret=' + CLIENT_SECRET + '&v=20160105&query=';
 var infoWindow;
 var infoWindows = [];
 var windowContent;
@@ -17,7 +17,7 @@ var locationNum = 0;
 /**
  * Initialize mapOptions to get the map and its contents
  */
-function initialize() {
+ function initialize() {
     //adding options to the map zoom level and setting the center for the map
     var mapOptions = {
         zoom: 6,
@@ -45,7 +45,7 @@ function initialize() {
  * @param {number} index - the index of a location or marker
  * @return {function} geocodeCallBack - a callback function
  */
-function addMarker(index){
+ function addMarker(index){
 
     var geocodeCallBack = function(results,status){
 
@@ -96,7 +96,7 @@ function addMarker(index){
         }else{
             alert('location fail to geocode : ' + status);
         }
-    }
+    };
     return geocodeCallBack;
 
 }
@@ -105,7 +105,7 @@ function addMarker(index){
  * Fit map to markers
  * @param {object} location - a location includes latitude and longitude
  */
-function autoCenter(location){
+ function autoCenter(location){
     ++locationNum;
     bounds.extend(location);
     if(locationNum === initLocs.length){
@@ -118,21 +118,57 @@ function autoCenter(location){
  * @param {number} index - the index of a location or marker
  * @param {function} infoWindowCallback - a callback function
  */
-function infoWindowContent(index,infoWindowCallback){
+ function infoWindowContent(index,infoWindowCallback){
     fourSquareUrl = fourSquareBaseUrl + initLocs[index].title + '&ll='+ initLocs[index].lat + ','+ initLocs[index].lng;
     $.getJSON(fourSquareUrl)
-        .done(function (data){
-            var venue = data.response.venues[0];
-            var markerName = venue.name;
-            var markerAddress = venue.location.formattedAddress;
-            var markerPhone = (venue.contact.formattedPhone === undefined)? 'None': venue.contact.formattedPhone;
-            windowContent ='<div class="info-window"><p><strong>Name: </strong>' + markerName+ '</p>' +
-                '<p><strong>Address: </strong>  ' + markerAddress + '</p>' +
-                '<p><strong>Phone: </strong>' + markerPhone + '</p></div>';
-            infoWindowCallback(windowContent);
-        }).fail(function(jqxhr, textStatus, error){
-            alert('Failed to connect to Foursquare: ' + textStatus + ' ' + jqxhr.status + ' ' + error);
-        }
+    .done(function (data){
+        var venue = data.response.venues[0];
+        var markerName = venue.name;
+        var markerAddress = venue.location.formattedAddress;
+        var markerPhone = (venue.contact.formattedPhone === undefined)? 'None': venue.contact.formattedPhone;
+        windowContent ='<div class="info-window"><p><strong>Name: </strong>' + markerName+ '</p>' +
+        '<p><strong>Address: </strong>  ' + markerAddress + '</p>' +
+        '<p><strong>Phone: </strong>' + markerPhone + '</p></div>';
+        infoWindowCallback(windowContent);
+    }).fail(function(jqxhr, textStatus, error){
+        alert('Failed to connect to Foursquare: ' + textStatus + ' ' + jqxhr.status + ' ' + error);
+    });
+    return geocodeCallBack;
+
+}
+
+/**
+ * Fit map to markers
+ * @param {object} location - a location includes latitude and longitude
+ */
+ function autoCenter(location){
+    ++locationNum;
+    bounds.extend(location);
+    if(locationNum === initLocs.length){
+        map.fitBounds(bounds);
+    }
+}
+
+/**
+ * Get Json data from foursquare API, show data in infowindow
+ * @param {number} index - the index of a location or marker
+ * @param {function} infoWindowCallback - a callback function
+ */
+ function infoWindowContent(index,infoWindowCallback){
+    fourSquareUrl = fourSquareBaseUrl + initLocs[index].title + '&ll='+ initLocs[index].lat + ','+ initLocs[index].lng;
+    $.getJSON(fourSquareUrl)
+    .done(function (data){
+        var venue = data.response.venues[0];
+        var markerName = venue.name;
+        var markerAddress = venue.location.formattedAddress;
+        var markerPhone = (venue.contact.formattedPhone === undefined)? 'None': venue.contact.formattedPhone;
+        windowContent ='<div class="info-window"><p><strong>Name: </strong>' + markerName+ '</p>' +
+        '<p><strong>Address: </strong>  ' + markerAddress + '</p>' +
+        '<p><strong>Phone: </strong>' + markerPhone + '</p></div>';
+        infoWindowCallback(windowContent);
+    }).fail(function(jqxhr, textStatus, error){
+        alert('Failed to connect to Foursquare: ' + textStatus + ' ' + jqxhr.status + ' ' + error);
+    }
     );
 }
 
@@ -159,75 +195,94 @@ initLocs = [{
     visible: ko.observable(true),
     boolTest: true
 },
-    {
-        title: "Disney Land",
-        lat: 33.805825,
-        lng: -117.9229715,
-        id: "nav1",
-        address: "1313 Disneyland DrAnaheim, CA 92802",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Hearst Castle",
-        lat: 35.644033,
-        lng: -121.1875503,
-        id: "nav2",
-        address:"750 Hearst Castle Rd San Simeon, CA 93452",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Monterey Bay Aquarium",
-        lat: 36.618266,
-        lng: -121.902339,
-        id: "nav3",
-        address:"886 Cannery Row Monterey, CA 93940",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Golden Gate Bridge",
-        lat: 37.819929,
-        lng: -122.478255,
-        id: "nav4",
-        address: "Pier 39, San Francisco, CA 94111",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Lake Elsinore",
-        lat: 33.7529,
-        lng: -116.0556,
-        id: "nav5",
-        address: "130 South Main Street ,Lake Elsinore, CA 92530",
-        visible: ko.observable(true),
-        boolTest: true
-    },
-    {
-        title: "Santa Barbara Zoo",
-        lat: 34.419527,
-        lng: -119.668010,
-        id: "nav6",
-        address: "500 Ninos Dr, Santa Barbara, CA 93103",
-        visible: ko.observable(true),
-        boolTest: true
-    }];
+{
+    title: "Disney Land",
+    lat: 33.805825,
+    lng: -117.9229715,
+    id: "nav1",
+    address: "1313 Disneyland DrAnaheim, CA 92802",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Hearst Castle",
+    lat: 35.644033,
+    lng: -121.1875503,
+    id: "nav2",
+    address:"750 Hearst Castle Rd San Simeon, CA 93452",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Monterey Bay Aquarium",
+    lat: 36.618266,
+    lng: -121.902339,
+    id: "nav3",
+    address:"886 Cannery Row Monterey, CA 93940",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Golden Gate Bridge",
+    lat: 37.819929,
+    lng: -122.478255,
+    id: "nav4",
+    address: "Pier 39, San Francisco, CA 94111",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Lake Elsinore",
+    lat: 33.7529,
+    lng: -116.0556,
+    id: "nav5",
+    address: "130 South Main Street ,Lake Elsinore, CA 92530",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Santa Barbara Zoo",
+    lat: 34.419527,
+    lng: -119.668010,
+    id: "nav6",
+    address: "500 Ninos Dr, Santa Barbara, CA 93103",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Universal Studios Hollywood",
+    lat: 34.137868,
+    lng: -118.352863,
+    id: "nav7",
+    address: "100 Universal City Plaza, Universal City, CA 91608",
+    visible: ko.observable(true),
+    boolTest: true
+},
+{
+    title: "Great America Pkwy",
+    lat: 37.397946,
+    lng: -121.974294,
+    id: "nav8",
+    address: "4701 Great America Pkwy, Santa Clara, CA 95054",
+    visible: ko.observable(true),
+    boolTest: true
+}];
+
 
 
 /**
  * Initialize the location data
  * @param {object} data - location data
  */
-var Loc = function(data){
+ var Loc = function(data){
     this.title = ko.observable(data.title);
-}
+};
 
 
 /**
  * viewModel of knockout
  */
-var viewModel = function () {
+ var viewModel = function () {
     var self = this;
 
     //knock out observables
@@ -247,7 +302,7 @@ var viewModel = function () {
 
     //show toggle text
     self.toggleDisplayText = ko.computed(function () {
-        return self.isDisplayOpen() ? "hide" : "show";
+        return self.isDisplayOpen() ? "<<" : ">>";
     });
 
     //get toggle status
@@ -271,7 +326,8 @@ var viewModel = function () {
                 },3000);
             }
         }
-    }
+    };
+
 
     //filters the list displayed based on search
     self.initLocs = ko.computed(function () {
@@ -289,6 +345,19 @@ var viewModel = function () {
     //search function to update the marker
     self.search = function (){
         searchAll(self.query());
+    };
+
+    //filters based on selection
+    function searchAll(inputContent){
+        self.locList.removeAll();
+        for(var i=0; i<initLocs.length ; i ++){
+            infoWindows[i].close();
+            markers[i].setVisible(false);
+            if(initLocs[i].title.toLowerCase().indexOf(inputContent.toLowerCase()) >= 0){
+                self.locList.push(new Loc(initLocs[i]));
+                markers[i].setVisible(true);
+            }
+        }
     }
 
     //filters based on selection
