@@ -33,14 +33,14 @@ body {background-color: #CCC;}
 
 @media screen and (max-width: 600px) {
     .search-list {
-        display: none;
+        display: inline-block;
         margin-bottom: 0px;
     }
 }
 
 @media screen and (max-width: 800px) and (orientation:landscape) {
     .search-list {
-        display: none;
+        display: inline-block;
 
     }
 }
