@@ -19,13 +19,13 @@ The markers display main attractions in California area. <br/>
 2.Search filter updates the map and the dropdown list <br/> 
 3.Clicking on any filter option updates the wiki link to corresponding location <br/>
 
-#Notes:
+##Notes:
 Added gulp task to minify the PRODUCTION version
 1.html <br/>
 2.js <br/>
 3.css <br/>
 
-#Reference:
+##Reference:
 http://knockoutjs.com/documentation/introduction.html<br/>
 http://api.jquery.com/<br/>
 http://www.w3schools.com/<br/>
